@@ -17,8 +17,8 @@ export async function POST(request: NextRequest) {
     const supabase = createServerClient();
 
     // Insert the comment
-    const { data: comment, error: insertError } = await supabase
-      .from('ai_email_comments')
+    const { data: comment, error: insertError } = await (supabase
+      .from('ai_email_comments') as any)
       .insert({
         email_intel_id: emailIntelId,
         comment_type: 'user_note',
@@ -47,8 +47,8 @@ export async function POST(request: NextRequest) {
         .single();
 
       // Insert into todos table
-      const { error: todoError } = await supabase
-        .from('todos')
+      const { error: todoError } = await (supabase
+        .from('todos') as any)
         .insert({
           title: `Review: ${content.substring(0, 100)}`,
           description: `From email: "${email?.subject}" (${email?.sender})\n\nNote: ${content}`,
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Also create an AI insight for visibility
-      await supabase.from('ai_insights').insert({
+      await (supabase.from('ai_insights') as any).insert({
         type: 'todo_created',
         title: `TODO: ${content.substring(0, 50)}...`,
         summary: `Created from email comment on: ${email?.subject}`,
@@ -81,8 +81,7 @@ export async function POST(request: NextRequest) {
       });
 
       // Update the email intel to mark it as flagged (has action items)
-      await supabase
-        .from('ai_email_intel')
+      await (supabase.from('ai_email_intel') as any)
         .update({ is_flagged: true })
         .eq('id', emailIntelId);
     }

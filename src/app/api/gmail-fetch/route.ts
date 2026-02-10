@@ -33,8 +33,8 @@ export async function POST(request: NextRequest) {
     // Store emails in email_inbox table
     const insertResults = [];
     for (const email of emails) {
-      const { data, error } = await supabase
-        .from('email_inbox')
+      const { data, error } = await (supabase
+        .from('email_inbox') as any)
         .upsert({
           message_id: email.message_id,
           thread_id: email.thread_id,

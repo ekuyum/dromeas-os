@@ -40,8 +40,8 @@ export async function GET(request: NextRequest) {
 
         let storedCount = 0;
         for (const email of emails) {
-          const { error } = await supabase
-            .from('email_inbox')
+          const { error } = await (supabase
+            .from('email_inbox') as any)
             .upsert({
               message_id: email.message_id,
               thread_id: email.thread_id,
@@ -90,8 +90,8 @@ export async function GET(request: NextRequest) {
           );
 
           // Store in ai_email_intel
-          const { error: insertError } = await supabase
-            .from('ai_email_intel')
+          const { error: insertError } = await (supabase
+            .from('ai_email_intel') as any)
             .upsert({
               email_id: email.message_id,
               thread_id: email.thread_id,
@@ -117,8 +117,8 @@ export async function GET(request: NextRequest) {
           if (!insertError) {
             classifiedCount++;
             // Mark as processed
-            await supabase
-              .from('email_inbox')
+            await (supabase
+              .from('email_inbox') as any)
               .update({ processed: true, processed_at: new Date().toISOString() })
               .eq('id', email.id);
           }

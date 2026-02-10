@@ -74,8 +74,8 @@ async function processEmails(supabase: any, emails: any[]) {
       );
 
       // Store classification in ai_email_intel table
-      const { data: intelRecord, error: insertError } = await supabase
-        .from('ai_email_intel')
+      const { data: intelRecord, error: insertError } = await (supabase
+        .from('ai_email_intel') as any)
         .upsert({
           email_id: email.id || email.message_id,
           thread_id: email.thread_id,
@@ -108,15 +108,15 @@ async function processEmails(supabase: any, emails: any[]) {
 
       // Mark original email as processed
       if (email.id) {
-        await supabase
-          .from('email_inbox')
+        await (supabase
+          .from('email_inbox') as any)
           .update({ processed: true, processed_at: new Date().toISOString() })
           .eq('id', email.id);
       }
 
       // Create AI insight for critical/high priority items
       if (classification.priority === 'critical' || classification.priority === 'high') {
-        await supabase.from('ai_insights').insert({
+        await (supabase.from('ai_insights') as any).insert({
           type: 'email_alert',
           title: `${classification.priority.toUpperCase()}: ${email.subject}`,
           summary: classification.summary,

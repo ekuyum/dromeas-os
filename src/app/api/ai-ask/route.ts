@@ -58,7 +58,7 @@ User Notes: ${email.user_notes || 'None'}
     const answer = await askAboutEmail(emailContext, question);
 
     // Store the Q&A in comments for reference
-    await supabase.from('ai_email_comments').insert({
+    await (supabase.from('ai_email_comments') as any).insert({
       email_intel_id: emailId,
       comment_type: 'ai_qa',
       content: `Q: ${question}\n\nA: ${answer}`,
