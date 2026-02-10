@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       .from('ai_email_intel')
       .select('*')
       .eq('id', emailId)
-      .single();
+      .single() as { data: any; error: any };
 
     if (fetchError || !email) {
       return NextResponse.json(
