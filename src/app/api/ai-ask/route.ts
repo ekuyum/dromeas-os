@@ -17,11 +17,14 @@ export async function POST(request: NextRequest) {
     const supabase = createServerClient();
 
     // Fetch the email context
-    const { data: email, error: fetchError } = await supabase
+    const result = await supabase
       .from('ai_email_intel')
       .select('*')
       .eq('id', emailId)
-      .single() as { data: any; error: any };
+      .single();
+
+    const email = result.data as any;
+    const fetchError = result.error;
 
     if (fetchError || !email) {
       return NextResponse.json(
