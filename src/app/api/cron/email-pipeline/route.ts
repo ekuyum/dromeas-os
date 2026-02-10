@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
     } else if (unprocessedEmails && unprocessedEmails.length > 0) {
       let classifiedCount = 0;
 
-      for (const email of unprocessedEmails) {
+      for (const email of unprocessedEmails as any[]) {
         try {
           const classification = await classifyEmail(
             email.subject || '',
