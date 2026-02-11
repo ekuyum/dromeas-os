@@ -40,11 +40,12 @@ export async function POST(request: NextRequest) {
     // If createTodo flag is set, create a TODO item
     if (createTodo) {
       // Get email details for context
-      const { data: email } = await supabase
+      const result = await supabase
         .from('ai_email_intel')
         .select('subject, sender')
         .eq('id', emailIntelId)
         .single();
+      const email = result.data as any;
 
       // Insert into todos table
       const { error: todoError } = await (supabase
